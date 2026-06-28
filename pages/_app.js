@@ -128,7 +128,7 @@ export default function MyApp({
         id="chatbase-script"
         src="https://www.chatbase.co/embed.min.js"
         strategy="afterInteractive"
-        data-chatbot-id="PBvTuBRn-4D-WmL-e0dju"
+        data-chatbot-id="qly8l_LeOefRhFIpJpunB"
         data-domain="www.chatbase.co"
       />
     )}
