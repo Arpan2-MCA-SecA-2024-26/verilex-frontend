@@ -88,6 +88,35 @@ export default function MyApp({
   router.pathname
 ]);
 
+useEffect(() => {
+  if (
+    ["/login", "/admin-login", "/maintenance"].includes(router.pathname)
+  ) {
+    return;
+  }
+
+  const existing = document.getElementById("chatbase-script");
+  if (existing) return;
+
+  const script = document.createElement("script");
+  script.id = "chatbase-script";
+  script.src = "https://www.chatbase.co/embed.min.js";
+  script.async = true;
+
+  script.setAttribute(
+    "data-chatbot-id",
+    "qly8l_LeOefRhFIpJpunB"
+  );
+  script.setAttribute("data-domain", "www.chatbase.co");
+
+  document.body.appendChild(script);
+
+  return () => {
+    const s = document.getElementById("chatbase-script");
+    if (s) s.remove();
+  };
+}, [router.pathname]);
+
   return (
 
     <>
@@ -118,20 +147,6 @@ export default function MyApp({
         src="https://accounts.google.com/gsi/client"
         strategy="afterInteractive"
       />
-
-      {![
-      "/login",
-      "/admin-login",
-      "/maintenance",
-    ].includes(router.pathname) && (
-      <Script
-        id="chatbase-script"
-        src="https://www.chatbase.co/embed.min.js"
-        strategy="afterInteractive"
-        data-chatbot-id="qly8l_LeOefRhFIpJpunB"
-        data-domain="www.chatbase.co"
-      />
-    )}
 
       <GoogleOAuthProvider
         clientId={
