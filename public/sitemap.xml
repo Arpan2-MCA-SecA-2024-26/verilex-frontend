@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+<url>
+<loc>https://verilex-frontend.vercel.app/</loc>
+</url>
+
+<url>
+<loc>https://verilex-frontend.vercel.app/about</loc>
+</url>
+
+<url>
+<loc>https://verilex-frontend.vercel.app/contact</loc>
+</url>
+
+<url>
+<loc>https://verilex-frontend.vercel.app/faq</loc>
+</url>
+
+<url>
+<loc>https://verilex-frontend.vercel.app/fact-check</loc>
+</url>
+
+<url>
+<loc>https://verilex-frontend.vercel.app/constitutional-qa</loc>
+</url>
+
+<url>
+<loc>https://verilex-frontend.vercel.app/legal</loc>
+</url>
+
+<url>
+<loc>https://verilex-frontend.vercel.app/history</loc>
+</url>
+
+</urlset>
