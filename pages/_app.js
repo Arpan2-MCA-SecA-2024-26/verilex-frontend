@@ -88,51 +88,6 @@ export default function MyApp({
   router.pathname
 ]);
 
-useEffect(() => {
-  // Hide chatbot on these pages
-  if (
-    ["/login", "/admin-login", "/maintenance"].includes(router.pathname)
-  ) {
-    return;
-  }
-
-  if (
-    !window.chatbase ||
-    window.chatbase("getState") !== "initialized"
-  ) {
-    window.chatbase = (...arguments) => {
-      if (!window.chatbase.q) {
-        window.chatbase.q = [];
-      }
-      window.chatbase.q.push(arguments);
-    };
-
-    window.chatbase = new Proxy(window.chatbase, {
-      get(target, prop) {
-        if (prop === "q") return target.q;
-        return (...args) => target(prop, ...args);
-      },
-    });
-
-    const onLoad = () => {
-      // Prevent duplicate loading
-      if (document.getElementById("qly8l_LeOefRhFIpJpunB")) return;
-
-      const script = document.createElement("script");
-      script.src = "https://www.chatbase.co/embed.min.js";
-      script.id = "qly8l_LeOefRhFIpJpunB";
-      script.domain = "www.chatbase.co";
-      document.body.appendChild(script);
-    };
-
-    if (document.readyState === "complete") {
-      onLoad();
-    } else {
-      window.addEventListener("load", onLoad);
-    }
-  }
-}, [router.pathname]);
-
   return (
 
     <>
@@ -169,6 +124,36 @@ useEffect(() => {
           process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
         }
       >
+
+        {!["/login", "/admin-login", "/maintenance"].includes(router.pathname) && (
+  <>
+    <Script id="chatbase-init" strategy="afterInteractive">
+      {`
+        (function(){
+          if(!window.chatbase||window.chatbase("getState")!=="initialized"){
+            window.chatbase=(...args)=>{
+              if(!window.chatbase.q){window.chatbase.q=[];}
+              window.chatbase.q.push(args);
+            };
+            window.chatbase=new Proxy(window.chatbase,{
+              get(target,prop){
+                if(prop==="q") return target.q;
+                return (...args)=>target(prop,...args);
+              }
+            });
+          }
+        })();
+      `}
+    </Script>
+
+    <Script
+      src="https://www.chatbase.co/embed.min.js"
+      id="qly8l_LeOefRhFIpJpunB"
+      strategy="afterInteractive"
+      data-domain="www.chatbase.co"
+    />
+  </>
+)}
 
         <Component {...pageProps} />
 
