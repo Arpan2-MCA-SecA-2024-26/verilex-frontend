@@ -89,32 +89,48 @@ export default function MyApp({
 ]);
 
 useEffect(() => {
+  // Hide chatbot on these pages
   if (
     ["/login", "/admin-login", "/maintenance"].includes(router.pathname)
   ) {
     return;
   }
 
-  const existing = document.getElementById("chatbase-script");
-  if (existing) return;
+  if (
+    !window.chatbase ||
+    window.chatbase("getState") !== "initialized"
+  ) {
+    window.chatbase = (...arguments) => {
+      if (!window.chatbase.q) {
+        window.chatbase.q = [];
+      }
+      window.chatbase.q.push(arguments);
+    };
 
-  const script = document.createElement("script");
-  script.id = "chatbase-script";
-  script.src = "https://www.chatbase.co/embed.min.js";
-  script.async = true;
+    window.chatbase = new Proxy(window.chatbase, {
+      get(target, prop) {
+        if (prop === "q") return target.q;
+        return (...args) => target(prop, ...args);
+      },
+    });
 
-  script.setAttribute(
-    "data-chatbot-id",
-    "qly8l_LeOefRhFIpJpunB"
-  );
-  script.setAttribute("data-domain", "www.chatbase.co");
+    const onLoad = () => {
+      // Prevent duplicate loading
+      if (document.getElementById("qly8l_LeOefRhFIpJpunB")) return;
 
-  document.body.appendChild(script);
+      const script = document.createElement("script");
+      script.src = "https://www.chatbase.co/embed.min.js";
+      script.id = "qly8l_LeOefRhFIpJpunB";
+      script.domain = "www.chatbase.co";
+      document.body.appendChild(script);
+    };
 
-  return () => {
-    const s = document.getElementById("chatbase-script");
-    if (s) s.remove();
-  };
+    if (document.readyState === "complete") {
+      onLoad();
+    } else {
+      window.addEventListener("load", onLoad);
+    }
+  }
 }, [router.pathname]);
 
   return (
